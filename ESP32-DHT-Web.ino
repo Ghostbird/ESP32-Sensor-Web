@@ -10,20 +10,12 @@
 #include <WebHandlerImpl.h>
 #include <WiFi.h>
 #include <ESPmDNS.h>
+#include "version.h"
 #include "index.h"
+#include "config.h"
 
-// Hostname to use for mDNS resolution.
-#define HOSTNAME "esp32"
-
-// Pin where the DHT sensor is connected.
-#define DHT_PIN 23
-
-// WiFi configuration
-#define SSID "..."
-#define PASSWORD "..."
-
-// TCP server at port 80 will respond to HTTP requests
-AsyncWebServer server(80);
+// TCP server at port HTTP_PORT will respond to HTTP requests
+AsyncWebServer server(HTTP_PORT);
 
 // DHT sensor, the DHT esp library auto-detects the type.
 DHTesp dht;
@@ -60,25 +52,105 @@ void handleSensor(AsyncWebServerRequest *request)
   request->send(response);
 }
 
+void configureAP()
+{
+  if (WIFI_MODE == WIFI_AP || WIFI_MODE == WIFI_AP_STA)
+  {
+    Serial.println("\nAttempting to create WiFi access point " + String(AP_SSID) + "...");
+    // Disable the default STA configuration.
+    WiFi.enableAP(false);
+    IPAddress ipaddress = IPAddress();
+    IPAddress gateway = IPAddress();
+    IPAddress netmask = IPAddress();
+    if (!ipaddress.fromString(AP_IP_ADDRESS))
+    {
+      Serial.println("Could not parse AP_IP_GATEWAY");
+      return;
+    }
+    if (!gateway.fromString(AP_IP_GATEWAY))
+    {
+      Serial.println("Could not parse AP_IP_ADDRESS");
+      return;
+    }
+    if (!netmask.fromString(AP_IP_NETMASK))
+    {
+      Serial.println("Could not parse AP_IP_NETMASK");
+      return;
+    }
+    // Try to enable the custom AP configuration
+    if (!WiFi.softAP(AP_SSID, AP_PASSWORD))
+    {
+      Serial.println("Failed to configure AP. Check AP_SSID and AP_PASSWORD configuration.");
+      // Disable AP on failure
+      WiFi.enableAP(false);
+      return;
+    }
+    Serial.println("Created WiFi AP: " + String(AP_SSID));
+    if (!WiFi.softAPConfig(ipaddress, gateway, netmask))
+    {
+      Serial.println("Failed to configure AP network settings. Check AP_IP_ADDRESS, AP_IP_GATEWAY, and AP_IP_NETMASK configuration.");
+      // Disable AP on failure      
+      WiFi.enableAP(false);
+      return;
+    }
+    Serial.println("AP IP address: " + String(AP_IP_ADDRESS));
+  }
+  else
+  {
+    // Disconnect and disable Access Point
+    WiFi.softAPdisconnect(true);
+    Serial.println("WiFi Access Point disabled.");
+  }
+}
+
+void configureSTA()
+{
+  Serial.println("Attempting to connect to " + String(STA_SSID) + "...");
+  if (WIFI_MODE == WIFI_STA || WIFI_MODE == WIFI_AP_STA)
+  {
+    WiFi.enableSTA(true);
+    // Connect to WiFi network
+    WiFi.begin(STA_SSID, STA_PASSWORD);
+    long abort_time = millis() + STA_CONNECT_TIME;
+    // Wait for connection
+    while (WiFi.status() != WL_CONNECTED) {
+        Serial.print(".");
+        if (millis() > abort_time)
+        {
+          Serial.println("\nCould not connect to " + String(STA_SSID) + " within " + String(STA_CONNECT_TIME/1000) + " seconds.");
+          return;
+        }
+        delay(500);
+    }
+    Serial.print("\nConnected to ");
+    Serial.println(STA_SSID);
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
+  }
+  else
+  {
+    // Disconnect and disable Station
+    WiFi.disconnect(true);
+    Serial.println("WiFi Station disabled.");
+  }
+}
+
+void startWiFi()
+{
+  WiFi.mode(WIFI_MODE);
+  configureAP();
+  Serial.println();
+  configureSTA();
+  Serial.println();
+}
+
 void setup(void)
 {  
   // Serial interface for debugging.
   Serial.begin(115200);
-
-  // Connect to WiFi network
-  WiFi.begin(SSID, PASSWORD);
-  Serial.println("");
-
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
-      Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(SSID);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+  Serial.println("ESP32-DHT-Web version " + String(VERSION_NUMBER));
+  // Initialise WiFi
+  startWiFi();
 
   // Set up mDNS responder
   while (!MDNS.begin(HOSTNAME)) {
