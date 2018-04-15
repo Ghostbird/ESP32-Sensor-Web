@@ -2,6 +2,8 @@
 
 Web view for a DHT temperature and humidity sensor connected to an ESP32.
 
+*Note:* This is not about the DHT sensor. This program can be modified fairly easily to show the data from far more interesting sensors.
+
 ## Setup Arduino IDE
 
 1. Install [ESP32 support](https://github.com/espressif/arduino-esp32#installation-instructions)
@@ -23,6 +25,11 @@ Web view for a DHT temperature and humidity sensor connected to an ESP32.
 1. Disconnect the ESP32 from the computer and connect it to a power supply for standalone operation
 
 ## Changelog
+
+### Version 0.2.1
+
+* Bugfix: Serial interface no longer prints that it is attempting to connect to the configured STA_SSID when WiFi is not in STA mode.
+* Bugfix: mDNS now advertises the http server on the configured HTTP_PORT instead of port 80.
 
 ### Version 0.2
 

@@ -17,7 +17,7 @@
 // TCP server at port HTTP_PORT will respond to HTTP requests
 AsyncWebServer server(HTTP_PORT);
 
-// DHT sensor, the DHT esp library auto-detects the type.
+// DHT sensor, the DHTesp library auto-detects the type.
 DHTesp dht;
 
 void handleNotFound(AsyncWebServerRequest *request)
@@ -99,15 +99,15 @@ void configureAP()
   {
     // Disconnect and disable Access Point
     WiFi.softAPdisconnect(true);
-    Serial.println("WiFi Access Point disabled.");
+    Serial.println("\nWiFi access point disabled.");
   }
 }
 
 void configureSTA()
 {
-  Serial.println("Attempting to connect to " + String(STA_SSID) + "...");
   if (WIFI_MODE == WIFI_STA || WIFI_MODE == WIFI_AP_STA)
   {
+    Serial.println("\nAttempting to connect to " + String(STA_SSID) + "...");
     WiFi.enableSTA(true);
     // Connect to WiFi network
     WiFi.begin(STA_SSID, STA_PASSWORD);
@@ -131,7 +131,7 @@ void configureSTA()
   {
     // Disconnect and disable Station
     WiFi.disconnect(true);
-    Serial.println("WiFi Station disabled.");
+    Serial.println("\nWiFi Station disabled.");
   }
 }
 
@@ -139,7 +139,6 @@ void startWiFi()
 {
   WiFi.mode(WIFI_MODE);
   configureAP();
-  Serial.println();
   configureSTA();
   Serial.println();
 }
@@ -176,7 +175,7 @@ void setup(void)
   Serial.println("HTTP server started");
 
   // Advertise HTTP server using mDNS Service Discovery
-  MDNS.addService("http", "tcp", 80);
+  MDNS.addService("http", "tcp", HTTP_PORT);
   Serial.println("mDNS responder started");
 }
 
