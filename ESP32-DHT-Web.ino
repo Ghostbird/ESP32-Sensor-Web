@@ -109,15 +109,22 @@ void configureSTA()
     WiFi.begin(STA_SSID, STA_PASSWORD);
     long abort_time = millis() + STA_CONNECT_TIME;
     // Wait for connection
-    while (WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
-        if (millis() > abort_time)
-        {
-          Serial.println("\nCould not connect to " + String(STA_SSID) + " within " + String(STA_CONNECT_TIME/1000) + " seconds.");
-          return;
-        }
-        delay(500);
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      // Toggle builtin LED.
+      digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+      Serial.print(".");
+      if (millis() > abort_time)
+      {
+        Serial.println("\nCould not connect to " + String(STA_SSID) + " within " + String(STA_CONNECT_TIME/1000) + " seconds.");
+        // Keep LED on.
+        digitalWrite(LED_BUILTIN, HIGH);
+        return;
+      }
+      delay(500);
     }
+    // Ensure LED is off.
+    digitalWrite(LED_BUILTIN, LOW);
     Serial.print("\nConnected to ");
     Serial.println(STA_SSID);
     Serial.print("IP address: ");
@@ -140,7 +147,11 @@ void startWiFi()
 }
 
 void setup(void)
-{  
+{
+  // Enable and switch off builtin LED.
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+
   // Serial interface for debugging.
   Serial.begin(115200);
   Serial.println("ESP32-DHT-Web version " + String(VERSION_NUMBER));
@@ -184,7 +195,9 @@ void loop(void) {
   #ifdef REMOTE_ENDPOINT_URI
     // Interval is given in seconds, so multiply by 1000.
     delay(REMOTE_ENDPOINT_INTERVAL * 1000);
+    digitalWrite(LED_BUILTIN, HIGH);
     postRemote();
+    digitalWrite(LED_BUILTIN, LOW);
   #endif
 }
 
