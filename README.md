@@ -1,6 +1,6 @@
-# ESP32 Sensors Web
+# ESP32 Sensor Web
 
-Web view for sensor connected to an ESP32.
+Web view for sensors connected to an ESP32.
 
 *Note:* The repository as is, is programmed for a DHT-11 or DHT-22 sensor (tested with both). However, it is not about the DHT sensor. If you modify the sensors.h file and the index.h webpage, it will work for any sensors that can be connected to an ESP32.
 
