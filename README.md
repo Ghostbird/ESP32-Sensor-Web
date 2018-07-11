@@ -1,8 +1,8 @@
-# ESP32 DHT Web
+# ESP32 Sensors Web
 
-Web view for a DHT temperature and humidity sensor connected to an ESP32.
+Web view for sensor connected to an ESP32.
 
-*Note:* This is not about the DHT sensor. This program can be modified fairly easily to show the data from far more interesting sensors.
+*Note:* The repository as is, is programmed for a DHT-11 or DHT-22 sensor (tested with both). However, it is not about the DHT sensor. If you modify the sensors.h file and the index.h webpage, it will work for any sensors that can be connected to an ESP32.
 
 ## Setup Arduino IDE
 
