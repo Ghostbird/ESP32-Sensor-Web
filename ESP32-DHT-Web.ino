@@ -12,6 +12,7 @@
 #include "version.h"
 #include "index.h"
 #include "config.h"
+#include "remote.h"
 #include "sensors.h"
 
 // TCP server at port HTTP_PORT will respond to HTTP requests
@@ -156,8 +157,10 @@ void setup(void)
   // Setup the sensors
   setupSensors();
 
-  // Start DHT sensor
-  dht.setup(DHT_PIN);
+  #ifdef REMOTE_ENDPOINT_URI
+    // Setup remote connection
+    setupRemote();
+  #endif
 
   // Configure the HTTP server
   // Add Server header
@@ -177,6 +180,11 @@ void setup(void)
   Serial.println("mDNS responder started");
 }
 
-// The main loop is unused, since our mDNS and HTTP servers are completely asynchronous.
-void loop(void) { }
+void loop(void) {
+  #ifdef REMOTE_ENDPOINT_URI
+    // Interval is given in seconds, so multiply by 1000.
+    delay(REMOTE_ENDPOINT_INTERVAL * 1000);
+    postRemote();
+  #endif
+}
 

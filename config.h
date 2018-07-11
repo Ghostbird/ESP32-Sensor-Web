@@ -26,3 +26,9 @@
 
 // HTTP configuration
 #define HTTP_PORT 80  // Port number to use for HTTP server
+
+// Remote configuration
+// Endpoint URL to post the data to. Uncomment the next line to enable this functionality.
+//#define REMOTE_ENDPOINT_URI "https://httpbin.org/post"
+// Interval in seconds
+#define REMOTE_ENDPOINT_INTERVAL 60
