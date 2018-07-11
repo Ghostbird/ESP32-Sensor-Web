@@ -26,6 +26,10 @@ Web view for sensors connected to an ESP32.
 
 ## Changelog
 
+### Version 0.3.1
+
+* Bugfix: Make INO file name match the repository name to avoid Arduino IDE errors.
+
 ### Version 0.3
 
 * Feature: All sensor specific code has been moved to a separate file `sensors.h`. This means that the main .ino program does not need any modifications to work with other sensors than the DHT-11 or DHT-22.
