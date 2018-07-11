@@ -26,6 +26,13 @@ Web view for sensor connected to an ESP32.
 
 ## Changelog
 
+### Version 0.3
+
+* Feature: All sensor specific code has been moved to a separate file `sensors.h`. This means that the main .ino program does not need any modifications to work with other sensors than the DHT-11 or DHT-22.
+* Feature: Configurable periodic posts to a remote URL.
+    While this library was originally written to support systems that periodically request data from this server,
+    it now also supports system that only offer an endpoint where the data can be periodically HTTP POSTed.
+
 ### Version 0.2.1
 
 * Bugfix: Serial interface no longer prints that it is attempting to connect to the configured STA_SSID when WiFi is not in STA mode.
