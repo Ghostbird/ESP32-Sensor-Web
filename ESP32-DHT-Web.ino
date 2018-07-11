@@ -1,4 +1,3 @@
-#include <DHTesp.h>
 #include <AsyncWebSocket.h>
 #include <StringArray.h>
 #include <SPIFFSEditor.h>
@@ -13,12 +12,10 @@
 #include "version.h"
 #include "index.h"
 #include "config.h"
+#include "sensors.h"
 
 // TCP server at port HTTP_PORT will respond to HTTP requests
 AsyncWebServer server(HTTP_PORT);
-
-// DHT sensor, the DHTesp library auto-detects the type.
-DHTesp dht;
 
 void handleNotFound(AsyncWebServerRequest *request)
 {
@@ -39,13 +36,11 @@ void handleSensor(AsyncWebServerRequest *request)
   // Add access control header so sensor data can be loaded by third party sites.
   response->addHeader("Access-Control-Allow-Origin", "*");
   // Get the root JSON object
-  JsonObject& root = response->getRoot();
-  // Read temperature and humidity from the DHT sensor
-  TempAndHumidity data = dht.getTempAndHumidity();
-  // Store data in the JSON object
-  root["temperature"] = data.temperature;
-  root["humidity"] = data.humidity;
-  root["uptime"] = millis();
+  JsonObject &root = response->getRoot();
+
+  // Load the sensor data into the JSON object.
+  loadSensorData(&root);
+
   // Calculate and set the Content-Length for the response after we've made all required modifications.
   response->setLength();
   // Send the JSON data to the client.
@@ -157,6 +152,9 @@ void setup(void)
       Serial.println("Error setting up MDNS responder!");
       delay(5000);
   }
+
+  // Setup the sensors
+  setupSensors();
 
   // Start DHT sensor
   dht.setup(DHT_PIN);
