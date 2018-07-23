@@ -18,6 +18,9 @@
 // TCP server at port HTTP_PORT will respond to HTTP requests
 AsyncWebServer server(HTTP_PORT);
 
+// Previous transmission to remote time
+uint64_t previous_ms = 0;
+
 void handleNotFound(AsyncWebServerRequest *request)
 {
   // Reply with an HTTP 404 status code and a small human readable message.
@@ -37,7 +40,7 @@ void handleSensor(AsyncWebServerRequest *request)
   // Add access control header so sensor data can be loaded by third party sites.
   response->addHeader("Access-Control-Allow-Origin", "*");
   // Get the root JSON object
-  JsonObject &root = response->getRoot();
+  JsonObject& root = response->getRoot();
 
   // Load the sensor data into the JSON object.
   loadSensorData(&root);
@@ -159,10 +162,11 @@ void setup(void)
   startWiFi();
 
   // Set up mDNS responder
-  while (!MDNS.begin(HOSTNAME)) {
-      // Retry every 5 seconds on failure.
-      Serial.println("Error setting up MDNS responder!");
-      delay(5000);
+  while (!MDNS.begin(HOSTNAME))
+  {
+    // Retry every 5 seconds on failure.
+    Serial.println("Error setting up MDNS responder!");
+    delay(5000);
   }
 
   // Setup the sensors
@@ -191,13 +195,29 @@ void setup(void)
   Serial.println("mDNS responder started");
 }
 
-void loop(void) {
-  #ifdef REMOTE_ENDPOINT_URI
+void sendData() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  previous_ms = millis();
+  postRemote();
+  digitalWrite(LED_BUILTIN, LOW);
+}
+
+void loop(void)
+{
+#ifdef REMOTE_ENDPOINT_URI
+  #ifdef REMOTE_ENDPOINT_INTERVAL
     // Interval is given in seconds, so multiply by 1000.
-    delay(REMOTE_ENDPOINT_INTERVAL * 1000);
-    digitalWrite(LED_BUILTIN, HIGH);
-    postRemote();
-    digitalWrite(LED_BUILTIN, LOW);
+    if (millis() - previous_ms > REMOTE_ENDPOINT_INTERVAL * 1000)
+    {
+      sendData();
+    }
   #endif
+  #ifdef REMOTE_ENDPOINT_SEND_ON_CHANGE
+    if (sensorsChanged()) {
+      sendData();
+      sensorChangesHandled();
+    };
+  #endif
+#endif
 }
 

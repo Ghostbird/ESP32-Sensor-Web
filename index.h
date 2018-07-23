@@ -39,7 +39,6 @@ const char * INDEX_HTML = PROGMEM( R"INDEX(
             .mdl-card__supporting-text {
                 font-size:6vmin;
                 line-height:6vmin;
-                height:100%;
             }
         </style>
         <script>
@@ -49,9 +48,11 @@ const char * INDEX_HTML = PROGMEM( R"INDEX(
                     if (this.readyState == 4 && this.status == 200) {
                         data = JSON.parse(xhttp.responseText);
                         // Typical action to be performed when the document is ready:
-                        document.getElementById("temperature").innerHTML = data.temperature;
-                        document.getElementById("humidity").innerHTML = data.humidity;
-                        document.getElementById("uptime").innerHTML = data.uptime;
+                        document.getElementById("dht-temperature").innerHTML = data.dht.temperature;
+                        document.getElementById("dht-humidity").innerHTML = data.dht.humidity;
+                        document.getElementById("uptime").innerHTML = data.uptime_ms;
+                        document.getElementById("pir-status").innerHTML = data.pir.status;
+                        document.getElementById("pir-since").innerHTML = data.pir.since_ms;
                     }
                 };
                 xhttp.open("GET", "/sensor", true);
@@ -74,31 +75,42 @@ const char * INDEX_HTML = PROGMEM( R"INDEX(
         <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">
-                    Temperature
+                    System
                 </h2>
             </div>
             <div class="mdl-card__supporting-text">
-                <span id="temperature"></span><span>℃</span>
-            </div>
-        </div>
-        <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">
-                    Humidity
-                </h2>
-            </div>
-            <div class="mdl-card__supporting-text">
-                <span id="humidity"></span><span>%</span>
-            </div>
-        </div>
-        <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">
-                    Uptime
-                </h2>
-            </div>
-            <div class="mdl-card__supporting-text">
+                <span>Uptime:</span>
                 <span id="uptime"></span><span>ms</span>
+            </div>
+        </div>
+        <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">
+                    DHT Sensor
+                </h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <span>Temperature:</span>
+                <span id="dht-temperature"></span><span>℃</span>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <span>Humidity:</span>
+                <span id="dht-humidity"></span><span>%</span>
+            </div>
+        </div>
+        <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">
+                    PIR Sensor
+                </h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <span>Status:</span>
+                <span id="pir-status"></span>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <span>Since:</span>
+                <span id="pir-since"></span><span>ms</span>
             </div>
         </div>
     </body>

@@ -3,7 +3,10 @@
 #define HOSTNAME "esp32"
 
 // Pin where the DHT sensor is connected.
-#define DHT_PIN 23
+#define DHT_PIN 22
+
+// Pin where the PIR sensor is connected.
+#define PIR_PIN 12
 
 // WiFi mode configuration (uncomment exactly one)
 //#define WIFI_MODE WIFI_OFF    // No WiFi at all. (Mainly for debugging purposes)
@@ -30,5 +33,12 @@
 // Remote configuration
 // Endpoint URL to post the data to. Uncomment the next line to enable this functionality.
 //#define REMOTE_ENDPOINT_URI "https://httpbin.org/post"
+/* Transmission timing controls:
+ * Note that REMOTE_ENDPOINT_INTERVAL and REMOTE_ENDPOINT_SEND_ON_CHANGE can both be active!
+ * In this case a transmission on change will reset the INTERVAL
+ * If INTERVAL is not defined, the SEND_ON_CHANGE may still be used to send only on changes.
+ */
 // Interval in seconds
 #define REMOTE_ENDPOINT_INTERVAL 60
+// For some sensors (e.g. PIR) it is desirable to send an update immediately on change.
+#define REMOTE_ENDPOINT_SEND_ON_CHANGE
