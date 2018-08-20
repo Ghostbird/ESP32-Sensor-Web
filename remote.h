@@ -7,7 +7,7 @@
 #include "config.h"
 #include "sensors.h"
 
-// User 30 seconds default timeout if not defined in config.h
+// Use 60 seconds default timeout if not defined in config.h
 #ifndef REMOTE_ENDPOINT_TIMEOUT
   #define REMOTE_ENDPOINT_TIMEOUT 60
 #endif
