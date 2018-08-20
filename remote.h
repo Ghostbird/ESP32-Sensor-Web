@@ -55,11 +55,10 @@ int postRemote(AsyncWebServerRequest *request)
   }
   else
   {
-    Serial.println("Failed to send data to remote");
-    Serial.println("HTTP: " + String(responseCode) + ": " + http.errorToString(responseCode));
+    Serial.println("Failed to connect to remote");
     if (request != NULL)
     {
-      request->send(responseCode);
+      request->send(500, "text/plain; charset=utf-8", "Failed to connect to " REMOTE_ENDPOINT_URI);
     }
   }
   // End HTTP connection (but TCP connection should be reused)
