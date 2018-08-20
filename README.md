@@ -31,8 +31,15 @@ It _may_ be necessary to disconnect the PIR sensor to re-upload the sketch succe
 
 ## Changelog
 
+### Version 0.4.1
+
+* Minor feature: Auto-hide web-UI cards for sensors that are not currently active in the configuration. Page still loads with everything visible, and hides cards as soon as the first data is received.
+* Fix: Remove attempted HTTP error handling for non-HTTP error codes
+* Maybe fix: Change pin for PIR sensor to 27 seems to prevent the need to disconnect the PIR sensor to re-upload the sketch. However, it is not certain that this is why it suddenly works in my test.
+
 ### Version 0.4
-* Feature: Added support for interrupt based PIR sensor (or any sensor that simply push/pulls a single pin)
+
+* Feature: Added support for interrupt based PIR sensor (or anything that simply push/pulls a single pin)
 
 ### Version 0.3.1
 
