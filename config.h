@@ -6,7 +6,7 @@
 #define DHT_PIN 22
 
 // Pin where the PIR sensor is connected.
-#define PIR_PIN 12
+#define PIR_PIN 27
 
 // WiFi mode configuration (uncomment exactly one)
 //#define WIFI_MODE WIFI_OFF    // No WiFi at all. (Mainly for debugging purposes)
