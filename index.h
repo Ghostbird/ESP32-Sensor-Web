@@ -48,11 +48,21 @@ const char * INDEX_HTML = PROGMEM( R"INDEX(
                     if (this.readyState == 4 && this.status == 200) {
                         data = JSON.parse(xhttp.responseText);
                         // Typical action to be performed when the document is ready:
-                        document.getElementById("dht-temperature").innerHTML = data.dht.temperature;
-                        document.getElementById("dht-humidity").innerHTML = data.dht.humidity;
+                        if (data.dht) {
+                            document.getElementById("dht").style.display = "block";
+                            document.getElementById("dht-temperature").innerHTML = data.dht.temperature;
+                            document.getElementById("dht-humidity").innerHTML = data.dht.humidity;
+                        } else {
+                            document.getElementById("dht").style.display = "none";
+                        }
                         document.getElementById("uptime").innerHTML = data.uptime_ms;
-                        document.getElementById("pir-status").innerHTML = data.pir.status;
-                        document.getElementById("pir-since").innerHTML = data.pir.since_ms;
+                        if (data.pir) {
+                            document.getElementById("pir").style.display = "block";
+                            document.getElementById("pir-status").innerHTML = data.pir.status;
+                            document.getElementById("pir-since").innerHTML = data.pir.since_ms;
+                        } else {
+                            document.getElementById("pir").style.display = "none";
+                        }
                     }
                 };
                 xhttp.open("GET", "/sensor", true);
@@ -83,7 +93,7 @@ const char * INDEX_HTML = PROGMEM( R"INDEX(
                 <span id="uptime"></span><span>ms</span>
             </div>
         </div>
-        <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
+        <div id="dht" class="mdl-card-wide mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">
                     DHT Sensor
@@ -98,7 +108,7 @@ const char * INDEX_HTML = PROGMEM( R"INDEX(
                 <span id="dht-humidity"></span><span>%</span>
             </div>
         </div>
-        <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
+        <div id="pir" class="mdl-card-wide mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">
                     PIR Sensor
