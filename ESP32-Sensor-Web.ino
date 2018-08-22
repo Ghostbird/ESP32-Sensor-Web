@@ -209,6 +209,8 @@ void loop(void)
     // Interval is given in seconds, so multiply by 1000.
     if (millis() - previous_ms > REMOTE_ENDPOINT_INTERVAL * 1000)
     {
+      // If we had a pending sensor change, we handle it now by coincidence.
+      sensorChangesHandled();
       sendData();
     }
   #endif
