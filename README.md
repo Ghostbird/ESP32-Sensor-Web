@@ -31,6 +31,11 @@ It _may_ be necessary to disconnect the PIR sensor to re-upload the sketch succe
 
 ## Changelog
 
+### Version 0.4.2
+
+* Fix: Only POST once to the remote when a periodic and interrupt-driven POST coincide.
+* Changed some comments in `config.h` to better explain the usage of some options.
+
 ### Version 0.4.1
 
 * Minor feature: Auto-hide web-UI cards for sensors that are not currently active in the configuration. Page still loads with everything visible, and hides cards as soon as the first data is received.
