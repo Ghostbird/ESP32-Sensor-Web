@@ -22,7 +22,7 @@
 
 // WiFi AP configuration
 #define AP_SSID "ESP32DHTWeb"         // 1 - 63 characters
-#define AP_PASSWORD "secretive"       // 8 - 63 characters (Use NULL to create an unsecured network)
+#define AP_PASSWORD "secretive"       // 8 - 63 characters. Use NULL (without quotes) to create an unsecured network
 #define AP_IP_ADDRESS "10.0.0.1"      // IP address of the device on it's own WiFi network
 #define AP_IP_GATEWAY "10.0.0.1"      // Gateway address of the device's WiFi network. Normally identical to AP_IP_ADDRESS
 #define AP_IP_NETMASK "255.255.255.0" // Netmask of the device's WiFi network
