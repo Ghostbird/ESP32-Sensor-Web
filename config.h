@@ -2,10 +2,10 @@
 // Hostname to use for mDNS resolution.
 #define HOSTNAME "esp32"
 
-// Pin where the DHT sensor is connected.
+// Pin where the DHT sensor is connected. (comment to disable)
 #define DHT_PIN 22
 
-// Pin where the PIR sensor is connected.
+// Pin where the PIR sensor is connected. (comment to disable)
 #define PIR_PIN 27
 
 // WiFi mode configuration (uncomment exactly one)
@@ -31,7 +31,7 @@
 #define HTTP_PORT 80  // Port number to use for HTTP server
 
 // Remote configuration
-// Endpoint URL to post the data to. Uncomment the next line to enable this functionality.
+// Endpoint URL to post the data to. Uncomment to enable this functionality.
 //#define REMOTE_ENDPOINT_URI "https://httpbin.org/post"
 /* Transmission timing controls:
  * Note that REMOTE_ENDPOINT_INTERVAL and REMOTE_ENDPOINT_SEND_ON_CHANGE can both be active!
