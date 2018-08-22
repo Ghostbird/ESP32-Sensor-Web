@@ -73,8 +73,10 @@ void loadSensorData(JsonObject *json)
   #endif
   #ifdef PIR_PIN
     JsonObject& pirJSON = json->createNestedObject("pir");
+    portENTER_CRITICAL(&mux);
     pirJSON["status"] = pir_status;
     pirJSON["since_ms"] = pir_since;
+    portEXIT_CRITICAL(&mux);
   #endif
 }
 
@@ -93,7 +95,7 @@ void sensorChangesHandled() {
   #ifdef PIR_PIN
     portENTER_CRITICAL(&mux);
     // Uncomment this to debug the PIR sensor
-    //digitalWrite(LED_BUILTIN, pir_status);
+    digitalWrite(LED_BUILTIN, pir_status);
     pir_change_handled = true;
     portEXIT_CRITICAL(&mux);
   #endif
